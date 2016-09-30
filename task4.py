@@ -30,7 +30,6 @@ def update_guessed_word(word, guess_word, char):
 
 def main():
     hidden_word = choose_random_word(read_words())
-    print(hidden_word)
     guessed_word = '_' * len(hidden_word)
     guesses = 8
     available_letters = 'abcdefghijklmnopqrstuvwxyz'
