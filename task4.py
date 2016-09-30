@@ -22,36 +22,43 @@ def update_available_letters(letters, char):
 
 def update_guessed_word(word, guess_word, char):
     updated_guessed_word = guess_word
-    for i in range(0, len(word)):
-        if word[i] == char:
+    for i, letter in enumerate(word):
+        if letter == char:
             updated_guessed_word = updated_guessed_word[0:i] + char + updated_guessed_word[i + 1:]
     return updated_guessed_word
 
 
-hidden_word = choose_random_word(read_words())
-print(hidden_word)
-guessed_word = ''.ljust(len(hidden_word), '_')
-guesses = 8
-available_letters = 'abcdefghijklmnopqrstuvwxyz'
+def main():
+    hidden_word = choose_random_word(read_words())
+    print(hidden_word)
+    guessed_word = '_' * len(hidden_word)
+    guesses = 8
+    available_letters = 'abcdefghijklmnopqrstuvwxyz'
 
-print('Welcome to the game, Hangman!')
-print('I am thinking of a word that is %d letters long.' % len(hidden_word))
-print(guessed_word)
+    print('Welcome to the game, Hangman!')
+    print('I am thinking of a word that is %d letters long.' % len(hidden_word))
+    print(guessed_word)
 
-while guesses != 0 and hidden_word != guessed_word:
-    print('You have %d guesses left' % guesses)
-    print('available letters: %s' % available_letters)
-    letter = input('Please guess a letter: ').lower()
-    available_letters = update_available_letters(available_letters, letter)
-    if letter in hidden_word:
-        guessed_word = update_guessed_word(hidden_word, guessed_word, letter)
-        print("Good guess: " + guessed_word)
+    while guesses != 0 and hidden_word != guessed_word:
+        print('You have %d guesses left' % guesses)
+        print('available letters: %s' % available_letters)
+        letter = str(input('Please guess a letter: ').lower())
+        if letter in hidden_word:
+            guessed_word = update_guessed_word(hidden_word, guessed_word, letter)
+            available_letters = update_available_letters(available_letters, letter)
+            print("Good guess: " + guessed_word)
+        elif letter not in available_letters:
+            print("Oops! Probably you have entered this letter already. Please try again: " + guessed_word)
+        else:
+            print("Oops! That letter is not in my word: " + guessed_word)
+            guesses -= 1
+            available_letters = update_available_letters(available_letters, letter)
+
+    if guesses == 0:
+        print("Sorry, but you lost.")
+        print("The word I am thinking is '" + hidden_word + "'")
     else:
-        print("Oops! That letter is not in my word: " + guessed_word)
-        guesses -= 1
+        print("You won.")
 
-if guesses == 0:
-    print("Sorry, but you lost.")
-    print("The word I am thinking is '" + hidden_word + "'")
-else:
-    print("You won.")
+if __name__ == "__main__":
+    main()
